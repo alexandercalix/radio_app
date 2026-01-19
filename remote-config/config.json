@@ -1,0 +1,27 @@
+{
+  "app": {
+    "version": "1.1.0",
+    "minVersion": "1.1.0",
+    "forceUpdate": true,
+    "message": "Hay una nueva versión disponible con mejoras importantes."
+  },
+
+  "radio": {
+    "name": "Frontera 95.1 FM",
+    "retryDelayMs": 1500,
+    "maxRetriesPerStream": 1,
+    "streams": [
+      {
+        "url": "https://stream-154.zeno.fm/0uwm0hb5u0hvv",
+        "label": "Primary"
+      }
+    ]
+  },
+
+  "links": {
+    "website": "https://www.fronterahn.com",
+    "facebook": "https://www.facebook.com/Frontera95.1FM",
+    "instagram": "https://www.instagram.com/frontera_95.1fm",
+    "tiktok": "https://www.tiktok.com/@frontera95.1fm"
+  }
+}

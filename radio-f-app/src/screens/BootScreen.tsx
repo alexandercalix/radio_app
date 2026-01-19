@@ -1,25 +1,43 @@
-import { View, Text, ActivityIndicator, Image, Pressable } from "react-native";
-import NetInfo from "@react-native-community/netinfo";
-import { useEffect, useState } from "react";
+import { View, Animated, Image, Easing } from "react-native";
+import { useEffect, useRef } from "react";
 import { theme } from "../config/theme";
 
-export function BootScreen({ onReady }: { onReady: () => void }) {
-  const [checking, setChecking] = useState(true);
-  const [offline, setOffline] = useState(false);
+type Props = {
+  onReady: () => void;
+};
 
-  const checkNetwork = async () => {
-    setChecking(true);
-    const state = await NetInfo.fetch();
-    setOffline(!state.isConnected);
-    setChecking(false);
-
-    if (state.isConnected) {
-      onReady();
-    }
-  };
+export function BootScreen({ onReady }: Props) {
+  const scale = useRef(new Animated.Value(0.7)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    checkNetwork();
+    Animated.sequence([
+      // Fade + zoom in
+      Animated.parallel([
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 1200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scale, {
+          toValue: 1.05,
+          duration: 1800,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+      ]),
+
+      // Settle back (cinematic overshoot)
+      Animated.timing(scale, {
+        toValue: 1,
+        duration: 400,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    const timer = setTimeout(onReady, 2600);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -29,52 +47,20 @@ export function BootScreen({ onReady }: { onReady: () => void }) {
         backgroundColor: theme.colors.background,
         justifyContent: "center",
         alignItems: "center",
-        padding: 24,
       }}
     >
-      <Image
-        source={require("../../assets/logo.png")}
-        style={{ width: 180, height: 180, marginBottom: 24 }}
-        resizeMode="contain"
-      />
-
-      {checking && (
-        <>
-          <ActivityIndicator color={theme.colors.primary} />
-          <Text style={{ color: theme.colors.muted, marginTop: 12 }}>
-            Checking connection…
-          </Text>
-        </>
-      )}
-
-      {!checking && offline && (
-        <>
-          <Text
-            style={{
-              color: theme.colors.text,
-              textAlign: "center",
-              marginBottom: 16,
-            }}
-          >
-            No internet connection.
-            {"\n"}Please connect to play the radio.
-          </Text>
-
-          <Pressable
-            onPress={checkNetwork}
-            style={{
-              backgroundColor: theme.colors.primary,
-              paddingHorizontal: 24,
-              paddingVertical: 12,
-              borderRadius: 10,
-            }}
-          >
-            <Text style={{ color: theme.colors.text, fontWeight: "600" }}>
-              Retry
-            </Text>
-          </Pressable>
-        </>
-      )}
+      <Animated.View
+        style={{
+          opacity,
+          transform: [{ scale }],
+        }}
+      >
+        <Image
+          source={require("../../assets/logo.png")}
+          style={{ width: 190, height: 190 }}
+          resizeMode="contain"
+        />
+      </Animated.View>
     </View>
   );
 }

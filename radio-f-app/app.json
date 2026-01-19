@@ -2,7 +2,7 @@
   "expo": {
     "name": "Frontera 95.1 FM",
     "slug": "frontera-951-fm",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",

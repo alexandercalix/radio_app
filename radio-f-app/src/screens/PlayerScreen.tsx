@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Linking } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRadio } from "../hooks/useRadio";
 import { BeatingLogo } from "../components/BeatingLogo";
@@ -7,6 +7,7 @@ import { theme } from "../config/theme";
 import { PlayPauseButton } from "../components/PlayButton";
 import { SocialLinks } from "../components/SocialLinks";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { LINKS } from "../config/links.config";
 
 type Props = {
   onAbout: () => void;
@@ -133,6 +134,38 @@ export default function PlayerScreen({ onAbout }: Props) {
   </Text>
 </Text>
 <SocialLinks />
+<Pressable
+  onPress={() => Linking.openURL(LINKS.whatsapp)}
+  style={{
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
+    backgroundColor: "transparent",
+  }}
+  accessibilityRole="button"
+  accessibilityLabel="Escríbenos por WhatsApp"
+>
+  <Ionicons
+    name="logo-whatsapp"
+    size={20}
+    color={theme.colors.primary}
+  />
+  <Text
+    style={{
+      color: theme.colors.primary,
+      fontSize: 14,
+      fontWeight: "600",
+      marginLeft: 8,
+    }}
+  >
+    Escríbenos por WhatsApp
+  </Text>
+</Pressable>
 <Text
   style={{
     color: theme.colors.muted,

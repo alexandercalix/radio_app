@@ -7,6 +7,10 @@ export type RemoteAppConfig = {
   minVersion: string;
   forceUpdate: boolean;
   message?: string;
+  storeUrls?: {
+    ios?: string;
+    android?: string;
+  };
 };
 
 export type RemoteRadioConfig = {

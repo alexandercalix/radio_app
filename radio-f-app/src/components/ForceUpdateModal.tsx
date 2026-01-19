@@ -1,17 +1,31 @@
-import { Modal, View, Text, Pressable, Linking } from "react-native";
+import { Modal, View, Text, Pressable, Linking, Platform } from "react-native";
 import { theme } from "../config/theme";
 
 type Props = {
   visible: boolean;
   message?: string;
+  storeUrls?: {
+    ios?: string;
+    android?: string;
+  };
 };
 
-const APP_STORE_URL =
-  "https://apps.apple.com/app/idXXXXXXXXX"; // luego lo cambias
+export function ForceUpdateModal({
+  visible,
+  message,
+  storeUrls,
+}: Props) {
+  if (!visible || !storeUrls) return null;
 
-export function ForceUpdateModal({ visible, message }: Props) {
+  const storeUrl =
+    Platform.OS === "ios"
+      ? storeUrls.ios
+      : storeUrls.android;
+
+  if (!storeUrl) return null;
+
   return (
-    <Modal visible={visible} transparent animationType="fade">
+    <Modal visible transparent animationType="fade">
       <View
         style={{
           flex: 1,
@@ -53,7 +67,7 @@ export function ForceUpdateModal({ visible, message }: Props) {
           </Text>
 
           <Pressable
-            onPress={() => Linking.openURL(APP_STORE_URL)}
+            onPress={() => Linking.openURL(storeUrl)}
             style={{
               backgroundColor: theme.colors.primary,
               paddingVertical: 12,

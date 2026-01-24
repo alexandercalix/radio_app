@@ -16,6 +16,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.frontera951fm",
       "infoPlist": {
+        "supportsTablet": true,
+        "deploymentTarget": "13.0",
         "UIBackgroundModes": [
           "audio"
         ]
@@ -26,10 +28,17 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.frontera951fm"
+      "package": "com.anonymous.frontera951fm",
+       "permissions": [
+    "android.permission.INTERNET",
+    "android.permission.MODIFY_AUDIO_SETTINGS"
+  ]
     },
     "web": {
       "favicon": "./assets/logo.png"
-    }
+    },
+    "plugins": [
+     
+    ]
   }
 }

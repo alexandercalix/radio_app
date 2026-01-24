@@ -1,81 +1,104 @@
-import { useEffect, useState } from "react";
-import { radioPlayer, StreamError } from "../audio/RadioPlayer";
+import { useState } from "react";
+import { Audio } from "expo-av";
 import { RADIO_CONFIG } from "../config/radio.config";
-import * as Network from "expo-network";
+import { radioStore } from "../audio/radioStore";
+import { Platform } from "react-native";
+
 export function useRadio() {
-  const [playing, setPlaying] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-    const PLAY_TIMEOUT_MS = 8000;
-  useEffect(() => {
-    radioPlayer.setStatusListener(setPlaying);
-  }, []);
+  const [, forceUpdate] = useState(0);
+  const sync = () => forceUpdate(v => v + 1);
 
-const play = async () => {
-  if (loading || playing) return;
+  const play = async () => {
+  if (radioStore.loading) return;
 
-  setLoading(true);
-  setError(null);
+  radioStore.loading = true;
+  sync();
 
   try {
-    await withTimeout(
-      radioPlayer.playWithFallback(
-        RADIO_CONFIG.streams.map(s => s.url),
-        RADIO_CONFIG.retryDelayMs,
-        RADIO_CONFIG.maxRetriesPerStream
-      ),
-      PLAY_TIMEOUT_MS
-    );
-
-    setPlaying(true);
-  } catch (e: any) {
-    if (e.message === "STREAM_TIMEOUT") {
-      setError("No se pudo conectar a la radio.");
-    } else if (e instanceof StreamError) {
-      setError("No se pudo conectar a la radio.");
+    if (!radioStore.sound) {
+      await createSound();
     } else {
-      setError("Error inesperado de reproducción.");
+      try {
+        await radioStore.sound.playAsync();
+      } catch (e) {
+        console.log("Sound dead, recreating…");
+        await createSound(); // 🔴 CLAVE
+      }
     }
+  } catch (e) {
+    console.log("Radio play error:", e);
+    radioStore.playing = false;
   } finally {
-    setLoading(false);
+    radioStore.loading = false;
+    sync();
   }
 };
 
-const stop = async () => {
-  try {
-    setLoading(false);
-    setPlaying(false);
-    setError(null);
-    await radioPlayer.stop();
-  } catch {
-    setLoading(false);
-    setPlaying(false);
+const createSound = async () => {
+  if (radioStore.sound) {
+    try {
+      await radioStore.sound.unloadAsync();
+    } catch {}
+    radioStore.sound = null;
   }
-};
 
-function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(new Error("STREAM_TIMEOUT"));
-    }, ms);
+  const source =
+    Platform.OS === "android"
+      ? {
+          uri: RADIO_CONFIG.streams[0].url,
+          headers: {
+            "Icy-MetaData": "1",
+            "User-Agent": "Mozilla/5.0",
+          },
+        }
+      : {
+          uri: RADIO_CONFIG.streams[0].url,
+        };
 
-    promise
-      .then(result => {
-        clearTimeout(timer);
-        resolve(result);
-      })
-      .catch(err => {
-        clearTimeout(timer);
-        reject(err);
-      });
+  const options =
+    Platform.OS === "android"
+      ? {
+          shouldPlay: true,
+          androidImplementation: "MediaPlayer" as const,
+        }
+      : {
+          shouldPlay: true,
+        };
+
+  const { sound } = await Audio.Sound.createAsync(source, options);
+
+  sound.setOnPlaybackStatusUpdate(status => {
+    if (!status.isLoaded) {
+      radioStore.playing = false;
+      sync();
+      return;
+    }
+
+    radioStore.playing =
+      status.isPlaying && !status.isBuffering;
+    sync();
   });
-}
+
+  radioStore.sound = sound;
+};
+
+  const stop = async () => {
+    if (!radioStore.sound) return;
+
+    try {
+      await radioStore.sound.stopAsync();
+      // ⛔ NO setPlaying aquí
+      // esperamos al status update
+    } catch (e) {
+      console.log("Radio stop error:", e);
+    }
+  };
 
   return {
     play,
     stop,
-    playing,
-    loading,
-    error,
+    playing: radioStore.playing,
+    loading: radioStore.loading,
+    error: null,
   };
 }

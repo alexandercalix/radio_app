@@ -205,7 +205,7 @@ export default function AboutScreen({ onBack }: Props) {
                 textAlign: "center",
               }}
             >
-              Oscar Calix · Software Engineer
+              Oscar Calix · SCSE
             </Text>
           </Pressable>
 

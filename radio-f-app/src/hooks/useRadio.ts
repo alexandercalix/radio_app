@@ -1,104 +1,140 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Audio } from "expo-av";
+import * as Network from "expo-network";
 import { RADIO_CONFIG } from "../config/radio.config";
-import { radioStore } from "../audio/radioStore";
 import { Platform } from "react-native";
 
+let sound: Audio.Sound | null = null;
+
 export function useRadio() {
-  const [, forceUpdate] = useState(0);
-  const sync = () => forceUpdate(v => v + 1);
+  const [playing, setPlaying] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const play = async () => {
-  if (radioStore.loading) return;
+  let wasPlayingBeforeDisconnect = false;
 
-  radioStore.loading = true;
-  sync();
-
-  try {
-    if (!radioStore.sound) {
-      await createSound();
+  // 🔌 Network listener: fuerza stop si se cae internet
+useEffect(() => {
+  const sub = Network.addNetworkStateListener(state => {
+    if (!state.isConnected) {
+      if (playing) {
+        wasPlayingBeforeDisconnect = true;
+        forceStop("Sin conexión a internet");
+      }
     } else {
-      try {
-        await radioStore.sound.playAsync();
-      } catch (e) {
-        console.log("Sound dead, recreating…");
-        await createSound(); // 🔴 CLAVE
+      // 🔁 Internet volvió
+      if (wasPlayingBeforeDisconnect) {
+        wasPlayingBeforeDisconnect = false;
+        play(); // 👈 intento ÚNICO de reconexión
       }
     }
-  } catch (e) {
-    console.log("Radio play error:", e);
-    radioStore.playing = false;
-  } finally {
-    radioStore.loading = false;
-    sync();
-  }
-};
+  });
 
-const createSound = async () => {
-  if (radioStore.sound) {
-    try {
-      await radioStore.sound.unloadAsync();
-    } catch {}
-    radioStore.sound = null;
-  }
+  return () => sub.remove();
+}, [playing]);
 
-  const source =
-    Platform.OS === "android"
-      ? {
-          uri: RADIO_CONFIG.streams[0].url,
-          headers: {
-            "Icy-MetaData": "1",
-            "User-Agent": "Mozilla/5.0",
-          },
-        }
-      : {
-          uri: RADIO_CONFIG.streams[0].url,
-        };
+  const createAndPlay = async () => {
+    // Limpieza defensiva
+    if (sound) {
+      try {
+        await sound.unloadAsync();
+      } catch {}
+      sound = null;
+    }
 
-  const options =
-    Platform.OS === "android"
-      ? {
-          shouldPlay: true,
-          androidImplementation: "MediaPlayer" as const,
-        }
-      : {
-          shouldPlay: true,
-        };
+    const source =
+      Platform.OS === "android"
+        ? {
+            uri: RADIO_CONFIG.streams[0].url,
+            headers: {
+              "Icy-MetaData": "1",
+              "User-Agent": "Mozilla/5.0",
+            },
+          }
+        : { uri: RADIO_CONFIG.streams[0].url };
 
-  const { sound } = await Audio.Sound.createAsync(source, options);
+    const options =
+      Platform.OS === "android"
+        ? {
+            shouldPlay: true,
+            androidImplementation: "MediaPlayer" as const,
+          }
+        : { shouldPlay: true };
 
-  sound.setOnPlaybackStatusUpdate(status => {
-    if (!status.isLoaded) {
-      radioStore.playing = false;
-      sync();
+    const result = await Audio.Sound.createAsync(source, options);
+    sound = result.sound;
+
+    sound.setOnPlaybackStatusUpdate(status => {
+      if (!status.isLoaded) {
+        setPlaying(false);
+        return;
+      }
+
+      // Android puede decir "isPlaying=true" aunque no suene aún
+      setPlaying(status.isPlaying && !status.isBuffering);
+    });
+  };
+
+  const play = async () => {
+    if (loading || playing) return;
+
+    setLoading(true);
+    setError(null);
+
+    const net = await Network.getNetworkStateAsync();
+    if (!net.isConnected) {
+      setError("Sin conexión a internet");
+      setLoading(false);
       return;
     }
 
-    radioStore.playing =
-      status.isPlaying && !status.isBuffering;
-    sync();
-  });
-
-  radioStore.sound = sound;
-};
-
-  const stop = async () => {
-    if (!radioStore.sound) return;
-
     try {
-      await radioStore.sound.stopAsync();
-      // ⛔ NO setPlaying aquí
-      // esperamos al status update
+      if (!sound) {
+        await createAndPlay();
+      } else {
+        try {
+          await sound.playAsync();
+        } catch {
+          // Android a veces mata el player internamente
+          await createAndPlay();
+        }
+      }
     } catch (e) {
-      console.log("Radio stop error:", e);
+      console.log("Radio play error:", e);
+      setError("No se pudo conectar a la radio.");
+      setPlaying(false);
+    } finally {
+      setLoading(false);
     }
   };
+
+  const forceStop = async (msg?: string) => {
+    console.log("Force stopping radio", msg ? `with message: ${msg}` : "");
+    try {
+      if (sound) {
+        try {
+          await sound.stopAsync();
+          await sound.unloadAsync();
+        } catch {}
+        sound = null;
+      }
+    } finally {
+      setPlaying(false);
+      setLoading(false);
+      if (msg) setError(msg);
+    }
+  };
+
+const stop = async () => {
+  wasPlayingBeforeDisconnect = false; // ⛔ corta reconexión
+  await forceStop();
+};
 
   return {
     play,
     stop,
-    playing: radioStore.playing,
-    loading: radioStore.loading,
-    error: null,
+    playing,
+    loading,
+    error,
   };
 }

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+   xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+   xmlns:controls="clr-namespace:RadioApp.Views.Controls"
+    x:Class="RadioApp.Views.PlayerPage"
+     BackgroundColor="#0E1F2D"
+     >
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource Tertiary}" Offset="0.0"/>
+            <GradientStop Color="{StaticResource Secondary}" Offset="1.0"/>
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+     <Shell.TitleView>
+        <Grid Padding="12,0" ColumnDefinitions="*,Auto" VerticalOptions="Center">
+            <!-- Title (optional) -->
+            <Label Text="La Ley del FM"
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   FontAttributes="Bold"/>
+
+            <!-- Info icon (FontAwesome) -->
+            <Label Grid.Column="1"
+                   Text="{Binding InfoIcon}"
+                   FontFamily="FASolid"
+                   FontSize="20"
+                   TextColor="White"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToAboutCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+    </Shell.TitleView>
+
+    <Grid RowDefinitions="*,Auto" Padding="30" >
+
+         <!-- MAIN CONTENT -->
+    <Grid Grid.Row="0">
+        <!-- EVERYTHING you already have goes here -->
+
+
+        <toolkit:MediaElement
+    x:Name="HiddenPlayer"
+    IsVisible="False"
+     />
+
+
+
+
+ <Image
+    Source="logo.png"
+    Aspect="AspectFill"
+    Opacity="0.05"
+    Scale="3"
+    HorizontalOptions="End"
+    VerticalOptions="Center"
+    TranslationX="150"
+    Rotation="-10" />
+    
+     <VerticalStackLayout Spacing="35"
+                     VerticalOptions="Center"
+                     HorizontalOptions="Center">
+
+     <!-- LOGO -->
+        <Image
+            Grid.Row="1"
+            x:Name="LogoImage"
+            Source="logo.png"
+            Aspect="AspectFit"
+            HorizontalOptions="Center"
+            MaximumWidthRequest="350"
+            HeightRequest="{OnIdiom Phone=180, Tablet=260, Desktop=300}" />
+
+        <!-- STATUS -->
+        <Label
+            Grid.Row="2"
+            Text="{Binding StatusText}"
+            FontSize="18"
+            TextColor="White"
+            HorizontalOptions="Center"
+            Margin="0,20,0,0"/>
+
+        <!-- PLAY BUTTON -->
+        <Frame
+            Grid.Row="3"
+            HeightRequest="{OnIdiom Phone=90, Tablet=130, Desktop=160}"
+            WidthRequest="{OnIdiom Phone=90, Tablet=130, Desktop=160}"
+            CornerRadius="{OnIdiom Phone=45, Tablet=65, Desktop=80}"
+            BackgroundColor="{StaticResource Primary}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            HasShadow="True"
+            Padding="0">
+
+            <Label
+                Text="{Binding MainButtonIcon}"
+                FontFamily="FASolid"
+                FontSize="{OnIdiom Phone=36, Tablet=48, Desktop=56}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="White"/>
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer
+                    Command="{Binding MainButtonCommand}" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+    <BoxView
+    HeightRequest="2"
+    WidthRequest="120"
+    Color="{StaticResource Primary}"
+    HorizontalOptions="Center"/>
+
+    <!-- SOCIAL MEDIA -->
+    <HorizontalStackLayout
+        Spacing="22"
+        HorizontalOptions="Center">
+
+        <!-- FACEBOOK -->
+         <Frame
+                HeightRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                WidthRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                CornerRadius="{OnIdiom Phone=25, Tablet=30, Desktop=35}"
+                BackgroundColor="{StaticResource Gray900}"
+                Padding="0"
+                HasShadow="False"
+                IsVisible="{Binding FacebookUrl}">
+
+                <Label
+                    FontFamily="FABrands"
+                    Text="{Binding FacebookIcon}"
+                    FontSize="{OnIdiom Phone=20, Tablet=24, Desktop=28}"
+                    TextColor="{StaticResource Primary}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"/>
+
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding OpenUrlCommand}"
+                        CommandParameter="{Binding FacebookUrl}" />
+                </Frame.GestureRecognizers>
+            </Frame>
+
+        <!-- INSTAGRAM -->
+        <Frame
+                HeightRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                WidthRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                CornerRadius="{OnIdiom Phone=25, Tablet=30, Desktop=35}"
+                BackgroundColor="{StaticResource Gray900}"
+                Padding="0"
+                HasShadow="False"
+            IsVisible="{Binding InstagramUrl}">
+
+            <Label
+                FontFamily="FABrands"
+                Text="{Binding InstagramIcon}"
+                FontSize="{OnIdiom Phone=16, Tablet=20, Desktop=24}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="{StaticResource Primary}" />
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer
+                    Command="{Binding OpenUrlCommand}"
+                    CommandParameter="{Binding InstagramUrl}" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <!-- WEBSITE -->
+        <Frame
+                HeightRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                WidthRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                CornerRadius="{OnIdiom Phone=25, Tablet=30, Desktop=35}"
+                BackgroundColor="{StaticResource Gray900}"
+                Padding="0"
+                HasShadow="False"
+            IsVisible="{Binding WebsiteUrl}">
+
+            <Label
+                FontFamily="FASolid"
+                Text="{Binding WebsiteIcon}"
+                 FontSize="{OnIdiom Phone=16, Tablet=20, Desktop=24}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="{StaticResource Primary}" />
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer
+                    Command="{Binding OpenUrlCommand}"
+                    CommandParameter="{Binding WebsiteUrl}" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <!-- TIKTOK -->
+        <Frame
+            CornerRadius="{OnIdiom Phone=25, Tablet=30, Desktop=35}"
+            HeightRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+            WidthRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+            BackgroundColor="{StaticResource Gray900}"
+            HasShadow="False"
+            Padding="0"
+            IsVisible="{Binding TikTokUrl}">
+
+            <Label
+                FontFamily="FABrands"
+                Text="{Binding TikTokIcon}"
+                FontSize="{OnIdiom Phone=16, Tablet=20, Desktop=24}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="{StaticResource Primary}"
+                />
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer
+                    Command="{Binding OpenUrlCommand}"
+                    CommandParameter="{Binding TikTokUrl}" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+        <!-- WHATSAPP -->
+        <Frame
+                HeightRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                WidthRequest="{OnIdiom Phone=50, Tablet=60, Desktop=70}"
+                CornerRadius="{OnIdiom Phone=25, Tablet=30, Desktop=35}"
+                BackgroundColor="{StaticResource Gray900}"
+                Padding="0"
+            IsVisible="{Binding WhatsappUrl}">
+
+            <Label
+                FontFamily="FABrands"
+                Text="{Binding WhatsappIcon}"
+                FontSize="{OnIdiom Phone=16, Tablet=20, Desktop=24}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="{StaticResource Primary}" />
+
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer
+                    Command="{Binding OpenUrlCommand}"
+                    CommandParameter="{Binding WhatsappUrl}" />
+            </Frame.GestureRecognizers>
+        </Frame>
+
+    </HorizontalStackLayout>
+
+    
+</VerticalStackLayout>
+    </Grid>
+       <!-- BOTTOM NAV -->
+  
+    </Grid>
+</ContentPage>

@@ -1,0 +1,108 @@
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Views;
+using RadioApp.Core.Enums;
+using RadioApp.Core.Interfaces;
+
+namespace RadioApp.Services;
+
+public class AudioService : IAudioService
+{
+    private MediaElement? _mediaElement;
+
+    private int _retryCount;
+    private const int MaxRetries = 5;
+
+    public PlayerState State { get; private set; } = PlayerState.Stopped;
+
+    public event Action<PlayerState>? StateChanged;
+
+    public void AttachPlayer(MediaElement mediaElement)
+    {
+        _mediaElement = mediaElement;
+
+        // Attach events AFTER player exists
+        _mediaElement.MediaOpened += OnMediaOpened;
+        _mediaElement.MediaFailed += OnMediaFailed;
+        _mediaElement.MediaEnded += OnMediaEnded;
+    }
+
+    private void OnMediaOpened(object? sender, EventArgs e)
+    {
+        Console.WriteLine("MEDIA OPENED");
+        _retryCount = 0;
+        SetState(PlayerState.Playing);
+    }
+
+    private void OnMediaFailed(object? sender, MediaFailedEventArgs e)
+    {
+        Console.WriteLine($"MEDIA FAILED: {e.ErrorMessage}");
+        _ = HandleReconnectAsync();
+    }
+
+    private void OnMediaEnded(object? sender, EventArgs e)
+    {
+        Console.WriteLine("MEDIA ENDED");
+        _ = HandleReconnectAsync();
+    }
+
+    public async Task PlayAsync(string url)
+    {
+        if (_mediaElement == null)
+            return;
+
+        if (State == PlayerState.Playing)
+            return;
+
+        _retryCount = 0;
+
+        SetState(PlayerState.Connecting);
+
+        try
+        {
+            _mediaElement.Source = MediaSource.FromUri(new Uri(url));
+            _mediaElement.Play();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"PLAY ERROR: {ex.Message}");
+            SetState(PlayerState.Error);
+        }
+    }
+
+    public Task StopAsync()
+    {
+        if (_mediaElement == null)
+            return Task.CompletedTask;
+
+        _mediaElement.Stop();
+        SetState(PlayerState.Stopped);
+
+        return Task.CompletedTask;
+    }
+
+    private async Task HandleReconnectAsync()
+    {
+        if (_mediaElement == null)
+            return;
+
+        if (_retryCount >= MaxRetries)
+        {
+            SetState(PlayerState.Error);
+            return;
+        }
+
+        _retryCount++;
+
+        SetState(PlayerState.Reconnecting);
+
+        await Task.Delay(2000 * _retryCount);
+
+        _mediaElement.Play();
+    }
+
+    private void SetState(PlayerState state)
+    {
+        State = state;
+        StateChanged?.Invoke(state);
+    }
+}

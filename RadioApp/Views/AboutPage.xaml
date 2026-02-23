@@ -1,0 +1,60 @@
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="RadioApp.Views.AboutPage"
+    xmlns:controls="clr-namespace:RadioApp.Views.Controls"
+    BackgroundColor="#0E1F2D">
+
+ <Grid RowDefinitions="*,Auto" Padding="30" >
+
+         <!-- MAIN CONTENT -->
+    <Grid Grid.Row="0">
+        <!-- EVERYTHING you already have goes here -->
+
+    <ScrollView>
+
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Map -->
+           <Image
+    Source="{Binding MapImageUrl}"
+    HeightRequest="220"
+    Aspect="AspectFill" />
+
+    <Button
+    Text="Open in Maps"
+    Command="{Binding OpenMapCommand}" />
+
+            <!-- Description -->
+            <Label
+                Text="{Binding Description}"
+                TextColor="White"
+                FontSize="16" />
+
+            <!-- Developer Section -->
+            <VerticalStackLayout Spacing="5">
+
+                <Label
+                    Text="Developed by"
+                    FontSize="14"
+                    TextColor="Gray" />
+
+                <Label
+                    Text="{Binding DeveloperName}"
+                    FontSize="18"
+                    TextColor="White" />
+
+                <Button
+                    Text="LinkedIn"
+                    Command="{Binding OpenLinkedInCommand}" />
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+     </Grid>
+       <!-- BOTTOM NAV -->
+   
+    </Grid>
+</ContentPage>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="RadioApp.Views.IntroPage"
+    BackgroundColor="{StaticResource Tertiary}">
+
+    <ContentPage.Background>
+    <LinearGradientBrush x:Name="BgGradient"
+                         StartPoint="0,0"
+                         EndPoint="1,1">
+        <GradientStop x:Name="Stop1" Color="#141E30" Offset="0.0"/>
+        <GradientStop x:Name="Stop2" Color="#243B55" Offset="0.5"/>
+        <GradientStop x:Name="Stop3" Color="#DD5E3B" Offset="1.0"/>
+    </LinearGradientBrush>
+</ContentPage.Background>
+
+    <Grid>
+          <Image
+        x:Name="Logo"
+        Source="logo.png"
+        WidthRequest="180"
+        Scale="0.5"
+        Opacity="0"
+        HorizontalOptions="Center"
+        VerticalOptions="Center" />
+    </Grid>
+
+</ContentPage>

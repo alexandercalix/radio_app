@@ -1,11 +1,10 @@
 {
   "app": {
-    "version": "1.1.0",
-    "minVersion": "1.1.0",
+    "version": "1.0.0",
+    "minVersion": "1.0.0",
     "forceUpdate": true,
     "message": "Hay una nueva versión disponible con mejoras importantes."
   },
-
   "radio": {
     "name": "Frontera 95.1 FM",
     "retryDelayMs": 1500,
@@ -17,11 +16,18 @@
       }
     ]
   },
-
   "links": {
     "website": "https://www.fronterahn.com",
     "facebook": "https://www.facebook.com/Frontera95.1FM",
     "instagram": "https://www.instagram.com/frontera_95.1fm",
-    "tiktok": "https://www.tiktok.com/@frontera95.1fm"
+    "tiktok": "https://www.tiktok.com/@frontera95.1fm",
+    "whatsapp": "https://wa.me/50432352141"
+  },
+  "about": {
+    "description": "La Ley del FM is your 24/7 station with the best Latin hits.",
+    "latitude": 14.3833,
+    "longitude": -88.5500,
+    "developerName": "Oscar Calix",
+    "developerLinkedIn": "https://www.linkedin.com/in/oscarcalixnolasco/"
   }
 }

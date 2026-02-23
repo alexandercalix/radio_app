@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="RadioApp.Views.Controls.BottomNavBar">
+
+    <Grid RowDefinitions="Auto"
+          BackgroundColor="Transparent"
+          Padding="0,10">
+
+        <!-- top subtle blue line -->
+        <BoxView
+            HeightRequest="1"
+            VerticalOptions="Start"
+            BackgroundColor="{StaticResource Secondary}"
+            Opacity="0.4"/>
+
+        <Grid ColumnDefinitions="*,*"
+              Margin="0,8,0,0">
+
+        
+
+            <!-- ABOUT -->
+            <Label
+                Text="About"
+                FontSize="16"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                TextColor="{Binding AboutTabColor}"
+                Grid.Column="1">
+
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding GoToAboutCommand}" />
+                </Label.GestureRecognizers>
+
+            </Label>
+
+        </Grid>
+
+    </Grid>
+
+</ContentView>

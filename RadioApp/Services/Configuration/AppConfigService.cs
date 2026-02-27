@@ -27,8 +27,11 @@ public class AppConfigService : IAppConfigService
 
         if (shouldRefresh)
         {
+            Console.WriteLine("Attempting to fetch remote config...");
             var remote = await TryFetchRemote();
-
+            Console.WriteLine(remote != null
+                ? "Remote config fetched successfully."
+                : "Failed to fetch remote config.");
             if (remote != null)
             {
                 SaveCache(remote);

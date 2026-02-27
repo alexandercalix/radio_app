@@ -18,6 +18,9 @@ public class AboutViewModel : BaseViewModel
     public ICommand OpenLinkedInCommand { get; }
     public ICommand OpenMapCommand { get; }
 
+    public string AppVersion =>
+    $"{AppInfo.Current.VersionString} ({AppInfo.Current.BuildString})";
+
     public ICommand GoToPlayerCommand => new Command(async () =>
 {
     await Shell.Current.GoToAsync("PlayerPage");
@@ -26,6 +29,21 @@ public class AboutViewModel : BaseViewModel
     public ICommand GoToAboutCommand => new Command(async () =>
     {
         await Shell.Current.GoToAsync("AboutPage", true);
+    });
+
+    public ICommand OpenFacebookCommand => new Command(async () =>
+{
+    await Launcher.Default.OpenAsync("https://www.facebook.com/Frontera95.1FM");
+});
+
+    public ICommand OpenInstagramCommand => new Command(async () =>
+    {
+        await Launcher.Default.OpenAsync("https://www.instagram.com/frontera_95.1fm");
+    });
+
+    public ICommand OpenTiktokCommand => new Command(async () =>
+    {
+        await Launcher.Default.OpenAsync("https://www.tiktok.com/@frontera95.1fm");
     });
 
     private string _currentRoute = "PlayerPage";
@@ -54,10 +72,7 @@ public class AboutViewModel : BaseViewModel
 
 
     public string MapImageUrl =>
-    $"https://maps.googleapis.com/maps/api/staticmap?center={Latitude},{Longitude}" +
-    $"&zoom=15&size=600x300" +
-    $"&markers=color:red%7C{Latitude},{Longitude}" +
-    $"&key=YOUR_API_KEY";
+    $"https://staticmap.openstreetmap.de/staticmap.php?center={Latitude},{Longitude}&zoom=15&size=600x300&markers={Latitude},{Longitude},red-pushpin";
 
     public AboutViewModel(IAppConfigService configService)
     {
@@ -71,7 +86,7 @@ public class AboutViewModel : BaseViewModel
 
         OpenMapCommand = new Command(async () =>
     {
-        var url = $"https://www.google.com/maps?q={Latitude},{Longitude}";
+        var url = $"https://www.google.com/maps/search/?api=1&query={Latitude},{Longitude}";
         await Launcher.Default.OpenAsync(url);
     });
 

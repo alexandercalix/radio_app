@@ -2,59 +2,141 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="RadioApp.Views.AboutPage"
-    xmlns:controls="clr-namespace:RadioApp.Views.Controls"
     BackgroundColor="#0E1F2D">
 
- <Grid RowDefinitions="*,Auto" Padding="30" >
+    <Grid RowDefinitions="*,Auto" Padding="20">
 
-         <!-- MAIN CONTENT -->
-    <Grid Grid.Row="0">
-        <!-- EVERYTHING you already have goes here -->
+        <!-- MAIN CONTENT -->
+        <ScrollView Grid.Row="0">
 
-    <ScrollView>
+            <VerticalStackLayout Spacing="25">
 
-        <VerticalStackLayout Padding="20" Spacing="20">
+                <!-- MAP CARD -->
+                <Frame
+                    CornerRadius="20"
+                    Padding="0"
+                    HasShadow="True"
+                    BackgroundColor="#162B3C">
 
-            <!-- Map -->
-           <Image
-    Source="{Binding MapImageUrl}"
-    HeightRequest="220"
-    Aspect="AspectFill" />
+                    <VerticalStackLayout>
 
-    <Button
-    Text="Open in Maps"
-    Command="{Binding OpenMapCommand}" />
+                        <Image
+                            Source="{Binding MapImageUrl}"
+                            HeightRequest="220"
+                            Aspect="AspectFill" />
 
-            <!-- Description -->
-            <Label
-                Text="{Binding Description}"
-                TextColor="White"
-                FontSize="16" />
+                        <Button
+                            Text="Open in Maps"
+                            Margin="15,10"
+                            BackgroundColor="#DD5E3B"
+                            TextColor="White"
+                            CornerRadius="12"
+                            Command="{Binding OpenMapCommand}" />
 
-            <!-- Developer Section -->
-            <VerticalStackLayout Spacing="5">
+                    </VerticalStackLayout>
+                </Frame>
 
+                <!-- DESCRIPTION -->
                 <Label
-                    Text="Developed by"
-                    FontSize="14"
-                    TextColor="Gray" />
+                    Text="{Binding Description}"
+                    TextColor="White"
+                    FontSize="16"
+                    LineBreakMode="WordWrap" />
 
+                <!-- SOCIAL / CONTACT SECTION -->
+                <VerticalStackLayout Spacing="10">
+
+                    <Label
+                        Text="Follow Us"
+                        FontSize="14"
+                        TextColor="Gray" />
+
+                    <HorizontalStackLayout
+                        Spacing="30"
+                        HorizontalOptions="Center">
+
+                        <Label
+                            Text="&#xf09a;"
+                            FontFamily="FontAwesomeBrands"
+                            FontSize="26"
+                            TextColor="White">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding OpenFacebookCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <Label
+                            Text="&#xf16d;"
+                            FontFamily="FontAwesomeBrands"
+                            FontSize="26"
+                            TextColor="White">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding OpenInstagramCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <Label
+                            Text="&#xe07b;"
+                            FontFamily="FontAwesomeBrands"
+                            FontSize="26"
+                            TextColor="White">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding OpenTiktokCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- DEVELOPER SECTION -->
+                <Frame
+                    CornerRadius="20"
+                    Padding="20"
+                    HasShadow="False"
+                    BackgroundColor="#162B3C">
+
+                    <VerticalStackLayout Spacing="8">
+
+                        <Label
+                            Text="Developed by"
+                            FontSize="13"
+                            TextColor="Gray" />
+
+                        <Label
+                            Text="{Binding DeveloperName}"
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            TextColor="White" />
+
+                        <Label
+                            Text="View LinkedIn"
+                            FontSize="14"
+                            TextColor="#4DA3FF"
+                            FontAttributes="Bold">
+
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding OpenLinkedInCommand}" />
+                            </Label.GestureRecognizers>
+
+                        </Label>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- APP VERSION -->
                 <Label
-                    Text="{Binding DeveloperName}"
-                    FontSize="18"
-                    TextColor="White" />
-
-                <Button
-                    Text="LinkedIn"
-                    Command="{Binding OpenLinkedInCommand}" />
+                    Text="{Binding AppVersion}"
+                    FontSize="12"
+                    TextColor="Gray"
+                    HorizontalOptions="Center" />
 
             </VerticalStackLayout>
 
-        </VerticalStackLayout>
+        </ScrollView>
 
-    </ScrollView>
-     </Grid>
-       <!-- BOTTOM NAV -->
-   
     </Grid>
 </ContentPage>

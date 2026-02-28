@@ -14,7 +14,7 @@ public class AppConfigService : IAppConfigService
     // 0 = Siempre (cada apertura)
     // 1 = Una vez al día
     // 7 = Una vez por semana
-    private const int RefreshDays = 1;
+    private const int RefreshDays = 0;
 
     private const string ConfigUrl = "https://alexandercalix.github.io/radio_app/remote-config/config.json";
     private const string ConfigCacheKey = "remote_config_cache";

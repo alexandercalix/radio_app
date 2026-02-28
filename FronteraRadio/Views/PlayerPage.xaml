@@ -13,7 +13,10 @@
     </ContentPage.Background>
 
     <Grid>
-       
+       <Image Source="fondo_placeholder.png" Aspect="AspectFill"
+               Opacity="0.18"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
 
         <Grid RowDefinitions="Auto, *, Auto" Padding="30">
             
@@ -40,8 +43,12 @@
                 
                <Image x:Name="LogoImage"
        Source="logo.png"
-       HeightRequest="{OnIdiom Phone=130, Tablet=300}"
-       HorizontalOptions="Center" />
+       HeightRequest="{OnIdiom Phone=180, Tablet=350}" 
+       HorizontalOptions="Center">
+    <Image.Shadow>
+        <Shadow Brush="Black" Offset="0,10" Radius="20" Opacity="0.4" />
+    </Image.Shadow>
+</Image>
 
                 <Label Text="{Binding StatusText}"
        FontSize="{OnIdiom Phone=16, Tablet=20}"
@@ -49,15 +56,15 @@
        HorizontalOptions="Center"
        Margin="{OnIdiom Phone='0,10,0,0', Tablet='0,20,0,0'}"/>
 
-               <Border StrokeShape="{OnIdiom Phone='RoundRectangle 45', Tablet='RoundRectangle 60'}"
-        HeightRequest="{OnIdiom Phone=90, Tablet=120}"
-        WidthRequest="{OnIdiom Phone=90, Tablet=120}"
+               <Border StrokeShape="{OnIdiom Phone='RoundRectangle 42', Tablet='RoundRectangle 60'}"
+        HeightRequest="{OnIdiom Phone=85, Tablet=120}"
+        WidthRequest="{OnIdiom Phone=85, Tablet=120}"
         BackgroundColor="#DD5E3B"
         HorizontalOptions="Center"
         StrokeThickness="0">
     <Label Text="{Binding MainButtonIcon}"
            FontFamily="FASolid"
-           FontSize="{OnIdiom Phone=30, Tablet=45}"
+           FontSize="{OnIdiom Phone=28, Tablet=45}"
            HorizontalOptions="Center"
            VerticalOptions="Center"
            TextColor="White"/>

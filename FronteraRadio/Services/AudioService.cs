@@ -50,15 +50,18 @@ public class AudioService : IAudioService
         if (_mediaElement == null)
             return;
 
-        if (State == PlayerState.Playing)
+        // BLOQUEO CRÍTICO: Si ya está sonando O está intentando conectar, no hagas nada.
+        if (State == PlayerState.Playing || State == PlayerState.Connecting || State == PlayerState.Reconnecting)
             return;
 
         _retryCount = 0;
-
         SetState(PlayerState.Connecting);
 
         try
         {
+            // Limpiamos cualquier rastro anterior antes de asignar el nuevo
+            _mediaElement.Source = null;
+
             _mediaElement.Source = MediaSource.FromUri(new Uri(url));
             _mediaElement.Play();
         }
@@ -74,8 +77,20 @@ public class AudioService : IAudioService
         if (_mediaElement == null)
             return Task.CompletedTask;
 
-        _mediaElement.Stop();
-        SetState(PlayerState.Stopped);
+        try
+        {
+            _mediaElement.Stop();
+
+            // ESTO ES LO MÁS IMPORTANTE PARA RADIOS ONLINE:
+            // Forzamos la liberación de la conexión y del buffer
+            _mediaElement.Source = null;
+
+            SetState(PlayerState.Stopped);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"STOP ERROR: {ex.Message}");
+        }
 
         return Task.CompletedTask;
     }

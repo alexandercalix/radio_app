@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "minVersion": "1.0.0",
     "forceUpdate": true,
-    "message": "Hay una nueva versión disponible con mejoras importantes."
+    "message": "Hay una nueva versión disponible con mejoras importantes.",
+    "playStoreUrl": "",
+    "appStoreUrl": ""
   },
   "radio": {
     "name": "Frontera 95.1 FM",
@@ -24,7 +26,7 @@
     "whatsapp": "https://wa.me/50432352141"
   },
   "about": {
-    "description": "La Ley del FM is your 24/7 station with the best Latin hits.",
+    "description": "Desde el corazón de Camasca, Intibucá, Honduras, transmitiendo para el mundo entero: Frontera 95.1 FM, La Ley del FM. Nuestra música no conoce fronteras. Somos la estación que une a los amantes de la música en una sola frecuencia. Con una programación variada que abarca desde los clásicos hasta los éxitos más recientes, Frontera 95.1 FM es el lugar donde la música cobra vida y las emociones se desatan. Sintonízanos y déjate llevar por el ritmo de la mejor música, porque en Frontera 95.1 FM, ¡la música es nuestra pasión y tu mejor compañía!",
     "latitude": 13.996781599342516,
     "longitude": -88.37549011322311,
     "developerName": "Oscar Calix",

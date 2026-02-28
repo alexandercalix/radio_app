@@ -19,18 +19,30 @@
             <Border StrokeShape="RoundRectangle 20"
                     StrokeThickness="0"
                     BackgroundColor="#162B3C"
-                    HeightRequest="220"
-                    MinimumHeightRequest="220">
+                    HeightRequest="250"
+                    HorizontalOptions="FillAndExpand">
+                
                 <Grid>
                     <Image Source="{Binding MapImageUrl}" 
-                           Aspect="AspectFill"
-                           BackgroundColor="#162B3C" />
-                    
-                    <Button Text="Abrir en Mapas"
-                            VerticalOptions="End"
-                            Margin="15"
-                            BackgroundColor="#DD5E3B"
-                            Command="{Binding OpenMapCommand}" />
+                        Aspect="AspectFill"
+                        BackgroundColor="#162B3C"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="FillAndExpand">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenMapCommand}" />
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <HorizontalStackLayout VerticalOptions="End" 
+                                        HorizontalOptions="Center" 
+                                        Margin="10" 
+                                        Padding="10,5"
+                                        BackgroundColor="#AA000000"
+                                        InputTransparent="True"> <Label Text="Toca para ampliar mapa" 
+                            TextColor="White" 
+                            FontSize="12" 
+                            FontAttributes="Italic" />
+                    </HorizontalStackLayout>
                 </Grid>
             </Border>
 

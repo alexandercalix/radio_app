@@ -1,10 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using RadioApp.Views;
-#if IOS
-using UIKit;
-#endif
-
-namespace RadioApp;
+﻿namespace RadioApp;
 
 public partial class App : Application
 {
@@ -12,12 +6,8 @@ public partial class App : Application
 	{
 		InitializeComponent();
 
-#if IOS
-		UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
-#endif
 
-		MainPage = new IntroPage();
+		// Just load the Shell immediately. The OS handles the splash screen before this!
+		MainPage = new AppShell();
 	}
-
-
 }

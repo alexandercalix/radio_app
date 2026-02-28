@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Input;
-using RadioApp.Core.Interfaces;
+using FronteraRadio.Core.Interfaces;
 
-namespace RadioApp.ViewModels;
+namespace FronteraRadio.ViewModels;
 
 public class AboutViewModel : BaseViewModel
 {

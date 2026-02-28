@@ -1,22 +1,25 @@
 using RadioApp.Core.Enums;
 using RadioApp.Core.Interfaces;
 using RadioApp.ViewModels;
+using CommunityToolkit.Maui.Views;
 
 namespace RadioApp.Views;
 
 public partial class PlayerPage : ContentPage
 {
 	private bool _isAnimating;
-
+	private MediaElement _hiddenPlayer;
+	private readonly IAudioService _audioService;
 
 	public PlayerPage(PlayerViewModel vm, IAudioService audioService)
 	{
 		InitializeComponent();
 		BindingContext = vm;
 		vm.SetCurrentRoute("PlayerPage");
-		audioService.AttachPlayer(HiddenPlayer);
 
-		audioService.StateChanged += state =>
+		_audioService = audioService;
+
+		_audioService.StateChanged += state =>
 		{
 			MainThread.BeginInvokeOnMainThread(() =>
 			{
@@ -26,25 +29,22 @@ public partial class PlayerPage : ContentPage
 					StopBounce();
 			});
 		};
+
+		this.Loaded += OnPageLoaded;
+	}
+
+	// MAKE SURE THIS IS ASYNC
+	private async void OnPageLoaded(object sender, EventArgs e)
+	{
+
 	}
 
 	private async Task StartBounce()
 	{
-		if (_isAnimating)
-			return;
-
-		_isAnimating = true;
-
-		while (_isAnimating)
-		{
-			await LogoImage.ScaleTo(1.1, 400, Easing.SinInOut);
-			await LogoImage.ScaleTo(1.0, 400, Easing.SinInOut);
-		}
 	}
 
 	private void StopBounce()
 	{
-		_isAnimating = false;
-		LogoImage.ScaleTo(1.0, 200);
+
 	}
 }

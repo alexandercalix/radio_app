@@ -1,11 +1,11 @@
 using System;
 using System.Windows.Input;
-using RadioApp.Core.Enums;
-using RadioApp.Core.Icons;
-using RadioApp.Core.Interfaces;
-using RadioApp.Views;
+using FronteraRadio.Core.Enums;
+using FronteraRadio.Core.Icons;
+using FronteraRadio.Core.Interfaces;
+using FronteraRadio.Views;
 
-namespace RadioApp.ViewModels;
+namespace FronteraRadio.ViewModels;
 
 
 
@@ -55,7 +55,7 @@ public class PlayerViewModel : BaseViewModel
 
     public ICommand GoToAboutCommand => new Command(async () =>
 {
-    await Shell.Current.GoToAsync(nameof(AboutPage));
+    // await Shell.Current.GoToAsync(nameof(AboutPage));
 });
 
     private string _currentRoute = "PlayerPage";
@@ -101,11 +101,11 @@ public class PlayerViewModel : BaseViewModel
 
     public string StatusText => State switch
     {
-        PlayerState.Stopped => "Stopped",
-        PlayerState.Connecting => "Connecting...",
-        PlayerState.Playing => "Playing",
-        PlayerState.Reconnecting => "Reconnecting...",
-        PlayerState.Error => "Connection Error",
+        PlayerState.Stopped => "Conectate con Frontera 95.1FM",
+        PlayerState.Connecting => "Sintonizando señal...",
+        PlayerState.Playing => "En Vivo: La Ley del FM",
+        PlayerState.Reconnecting => "Señal débil, recuperando...",
+        PlayerState.Error => "Opps! Revisa tu internet",
         _ => ""
     };
 

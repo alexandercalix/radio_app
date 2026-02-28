@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FronteraRadio.Views.PlayerPage"
+             BackgroundColor="#0E1F2D"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#1a2e3e" Offset="0.0"/>
+            <GradientStop Color="#0E1F2D" Offset="1.0"/>
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid>
+       
+
+        <Grid RowDefinitions="Auto, *, Auto" Padding="30">
+            
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" VerticalOptions="Start" HeightRequest="50">
+                <Label Text="La Ley del FM" 
+                       TextColor="White" 
+                       VerticalOptions="Center" 
+                       FontAttributes="Bold" 
+                       FontSize="{OnIdiom Phone=18, Tablet=26}"/>
+                
+                <Label Grid.Column="1"
+                       Text="{Binding InfoIcon}"
+                       FontFamily="FASolid"
+                       FontSize="{OnIdiom Phone=22, Tablet=32}"
+                       TextColor="White"
+                       VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToAboutCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+
+            <VerticalStackLayout Grid.Row="1" Spacing="25" VerticalOptions="Center">
+                
+               <Image x:Name="LogoImage"
+       Source="logo.png"
+       HeightRequest="{OnIdiom Phone=130, Tablet=300}"
+       HorizontalOptions="Center" />
+
+                <Label Text="{Binding StatusText}"
+       FontSize="{OnIdiom Phone=16, Tablet=20}"
+       TextColor="White"
+       HorizontalOptions="Center"
+       Margin="{OnIdiom Phone='0,10,0,0', Tablet='0,20,0,0'}"/>
+
+               <Border StrokeShape="{OnIdiom Phone='RoundRectangle 45', Tablet='RoundRectangle 60'}"
+        HeightRequest="{OnIdiom Phone=90, Tablet=120}"
+        WidthRequest="{OnIdiom Phone=90, Tablet=120}"
+        BackgroundColor="#DD5E3B"
+        HorizontalOptions="Center"
+        StrokeThickness="0">
+    <Label Text="{Binding MainButtonIcon}"
+           FontFamily="FASolid"
+           FontSize="{OnIdiom Phone=30, Tablet=45}"
+           HorizontalOptions="Center"
+           VerticalOptions="Center"
+           TextColor="White"/>
+    <Border.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding MainButtonCommand}" />
+    </Border.GestureRecognizers>
+</Border>
+
+                <BoxView HeightRequest="2" WidthRequest="100" 
+                         Color="#DD5E3B" HorizontalOptions="Center" Margin="0,10"/>
+            </VerticalStackLayout>
+
+            <FlexLayout Grid.Row="2" 
+            Wrap="NoWrap" 
+            JustifyContent="SpaceEvenly" 
+            AlignItems="Center" 
+            Direction="Row"
+            Margin="{OnIdiom Phone='10,0,10,20', Tablet='0,0,0,20'}">
+    
+    <Border StrokeShape="{OnIdiom Phone='RoundRectangle 22', Tablet='RoundRectangle 35'}" 
+            HeightRequest="{OnIdiom Phone=45, Tablet=70}" 
+            WidthRequest="{OnIdiom Phone=45, Tablet=70}" 
+            BackgroundColor="#111827" 
+            StrokeThickness="0"
+            IsVisible="{Binding FacebookUrl}">
+        <Label Text="{Binding FacebookIcon}" FontFamily="FABrands" 
+               FontSize="{OnIdiom Phone=18, Tablet=30}" 
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="#DD5E3B" />
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding OpenUrlCommand}" CommandParameter="{Binding FacebookUrl}" />
+        </Border.GestureRecognizers>
+    </Border>
+
+    <Border StrokeShape="{OnIdiom Phone='RoundRectangle 22', Tablet='RoundRectangle 35'}" 
+            HeightRequest="{OnIdiom Phone=45, Tablet=70}" 
+            WidthRequest="{OnIdiom Phone=45, Tablet=70}" 
+            BackgroundColor="#111827" 
+            StrokeThickness="0"
+            IsVisible="{Binding InstagramUrl}">
+        <Label Text="{Binding InstagramIcon}" FontFamily="FABrands" 
+               FontSize="{OnIdiom Phone=18, Tablet=30}" 
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="#DD5E3B" />
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding OpenUrlCommand}" CommandParameter="{Binding InstagramUrl}" />
+        </Border.GestureRecognizers>
+    </Border>
+
+    <Border StrokeShape="{OnIdiom Phone='RoundRectangle 22', Tablet='RoundRectangle 35'}" 
+            HeightRequest="{OnIdiom Phone=45, Tablet=70}" 
+            WidthRequest="{OnIdiom Phone=45, Tablet=70}" 
+            BackgroundColor="#111827" 
+            StrokeThickness="0"
+            IsVisible="{Binding WebsiteUrl}">
+        <Label Text="{Binding WebsiteIcon}" FontFamily="FASolid" 
+               FontSize="{OnIdiom Phone=18, Tablet=30}" 
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="#DD5E3B" />
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding OpenUrlCommand}" CommandParameter="{Binding WebsiteUrl}" />
+        </Border.GestureRecognizers>
+    </Border>
+
+    <Border StrokeShape="{OnIdiom Phone='RoundRectangle 22', Tablet='RoundRectangle 35'}" 
+            HeightRequest="{OnIdiom Phone=45, Tablet=70}" 
+            WidthRequest="{OnIdiom Phone=45, Tablet=70}" 
+            BackgroundColor="#111827" 
+            StrokeThickness="0"
+            IsVisible="{Binding TikTokUrl}">
+        <Label Text="{Binding TikTokIcon}" FontFamily="FABrands" 
+               FontSize="{OnIdiom Phone=18, Tablet=30}" 
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="#DD5E3B" />
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding OpenUrlCommand}" CommandParameter="{Binding TikTokUrl}" />
+        </Border.GestureRecognizers>
+    </Border>
+
+    <Border StrokeShape="{OnIdiom Phone='RoundRectangle 22', Tablet='RoundRectangle 35'}" 
+            HeightRequest="{OnIdiom Phone=45, Tablet=70}" 
+            WidthRequest="{OnIdiom Phone=45, Tablet=70}" 
+            BackgroundColor="#111827" 
+            StrokeThickness="0"
+            IsVisible="{Binding WhatsAppUrl}">
+        <Label Text="{Binding WhatsappIcon}" FontFamily="FABrands" 
+               FontSize="{OnIdiom Phone=18, Tablet=30}" 
+               HorizontalOptions="Center" VerticalOptions="Center" TextColor="#DD5E3B" />
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding OpenUrlCommand}" CommandParameter="{Binding WhatsAppUrl}" />
+        </Border.GestureRecognizers>
+    </Border>
+
+</FlexLayout>
+        </Grid>
+
+        <ContentView x:Name="PlayerContainer" InputTransparent="True" />
+    </Grid>
+</ContentPage>

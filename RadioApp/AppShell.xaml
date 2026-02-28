@@ -5,12 +5,10 @@
     xmlns:views="clr-namespace:RadioApp.Views"
     Shell.BackgroundColor="{StaticResource MidnightBlue}"
     Shell.ForegroundColor="{StaticResource White}"
-    Shell.TitleColor="{StaticResource White}"
-    >
+    Shell.TitleColor="{StaticResource White}">
 
-    <!-- UNA SOLA RAÍZ -->
     <ShellContent
-    Route="PlayerPage"
-    ContentTemplate="{DataTemplate views:PlayerPage}" />
+        Route="PlayerPage"
+        ContentTemplate="{DataTemplate views:PlayerPage}" />
 
 </Shell>

@@ -8,11 +8,11 @@ public class AboutViewModel : BaseViewModel
 {
     private readonly IAppConfigService _configService;
 
-    public string Description { get; private set; } = "";
+    public string Description { get; private set; } = "Cargando información...";
     public double Latitude { get; private set; }
     public double Longitude { get; private set; }
 
-    public string DeveloperName { get; private set; } = "";
+    public string DeveloperName { get; private set; } = "Cargando...";
     public string DeveloperLinkedIn { get; private set; } = "";
 
     public ICommand OpenLinkedInCommand { get; }
@@ -100,18 +100,20 @@ public class AboutViewModel : BaseViewModel
 
         // Force this to the main thread!
         MainThread.BeginInvokeOnMainThread(() =>
-        {
-            Description = about.Description ?? "Default radio description.";
-            Latitude = about.Latitude ?? 0;
-            Longitude = about.Longitude ?? 0;
-            DeveloperName = about.DeveloperName ?? "Oscar Calix";
-            DeveloperLinkedIn = about.DeveloperLinkedIn ?? "";
+ {
+     Description = about.Description ?? "Default radio description.";
+     Latitude = about.Latitude ?? 0;
+     Longitude = about.Longitude ?? 0;
+     DeveloperName = about.DeveloperName ?? "Oscar Calix";
+     DeveloperLinkedIn = about.DeveloperLinkedIn ?? "";
 
-            OnPropertyChanged(nameof(Description));
-            OnPropertyChanged(nameof(Latitude));
-            OnPropertyChanged(nameof(Longitude));
-            OnPropertyChanged(nameof(DeveloperName));
-            OnPropertyChanged(nameof(DeveloperLinkedIn));
-        });
+     // AVISAR A LA UI DE TODO
+     OnPropertyChanged(nameof(Description));
+     OnPropertyChanged(nameof(Latitude));
+     OnPropertyChanged(nameof(Longitude));
+     OnPropertyChanged(nameof(DeveloperName));
+     OnPropertyChanged(nameof(DeveloperLinkedIn));
+     OnPropertyChanged(nameof(MapImageUrl)); // <--- VITAL: Avisa que la URL cambió
+ });
     }
 }

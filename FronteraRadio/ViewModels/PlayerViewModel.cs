@@ -55,7 +55,7 @@ public class PlayerViewModel : BaseViewModel
 
     public ICommand GoToAboutCommand => new Command(async () =>
 {
-    // await Shell.Current.GoToAsync(nameof(AboutPage));
+    await Shell.Current.GoToAsync(nameof(AboutPage));
 });
 
     private string _currentRoute = "PlayerPage";

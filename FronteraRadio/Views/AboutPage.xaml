@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icons="clr-namespace:FronteraRadio.Core.Icons"
+             x:Class="FronteraRadio.Views.AboutPage"
+             BackgroundColor="#0E1F2D"
+             Title="Acerca de">
+
+    <ScrollView BackgroundColor="#0E1F2D">
+        <StackLayout Padding="{OnIdiom Phone=20, Tablet=40}" 
+                     Spacing="25" 
+                     HorizontalOptions="FillAndExpand">
+
+            <Label Text="INFORMACIÓN" 
+                   TextColor="#DD5E3B" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" />
+
+            <Border StrokeShape="RoundRectangle 20"
+                    StrokeThickness="0"
+                    BackgroundColor="#162B3C"
+                    HeightRequest="220"
+                    MinimumHeightRequest="220">
+                <Grid>
+                    <Image Source="{Binding MapImageUrl}" 
+                           Aspect="AspectFill"
+                           BackgroundColor="#162B3C" />
+                    
+                    <Button Text="Abrir en Mapas"
+                            VerticalOptions="End"
+                            Margin="15"
+                            BackgroundColor="#DD5E3B"
+                            Command="{Binding OpenMapCommand}" />
+                </Grid>
+            </Border>
+
+            <Label Text="{Binding Description}"
+                   TextColor="White"
+                   FontSize="16"
+                   HorizontalTextAlignment="Center"
+                   MinimumHeightRequest="50" />
+
+            <StackLayout Orientation="Horizontal" Spacing="40" HorizontalOptions="Center">
+                <Label Text="{x:Static icons:FaIcons.Facebook}" FontFamily="FABrands" FontSize="30" TextColor="White">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenFacebookCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Text="{x:Static icons:FaIcons.Instagram}" FontFamily="FABrands" FontSize="30" TextColor="White">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenInstagramCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Text="{x:Static icons:FaIcons.Tiktok}" FontFamily="FABrands" FontSize="30" TextColor="White">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenTiktokCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+
+            <Border StrokeShape="RoundRectangle 20"
+                    Padding="20"
+                    BackgroundColor="#162B3C"
+                    MinimumHeightRequest="100">
+                <StackLayout Spacing="5">
+                    <Label Text="Desarrollado por" TextColor="Gray" FontSize="12" />
+                    <Label Text="{Binding DeveloperName}" TextColor="White" FontAttributes="Bold" FontSize="18" />
+                    <Label Text="Ver LinkedIn" TextColor="#4DA3FF" FontAttributes="Bold">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenLinkedInCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </Border>
+
+            <Label Text="{Binding AppVersion}" 
+                   TextColor="Gray" 
+                   HorizontalOptions="Center" 
+                   Margin="0,20" />
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

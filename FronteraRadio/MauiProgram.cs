@@ -35,10 +35,13 @@ public static class MauiProgram
 
 		// 2. REGISTRAR VIEWMODELS (Músculos)
 		builder.Services.AddSingleton<PlayerViewModel>();
+		builder.Services.AddSingleton<AboutViewModel>();
+
 
 		// 3. REGISTRAR VIEWS (Páginas)
 		// Es vital registrar la página para que el Dependency Injection funcione
 		builder.Services.AddSingleton<PlayerPage>();
+		builder.Services.AddSingleton<AboutPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

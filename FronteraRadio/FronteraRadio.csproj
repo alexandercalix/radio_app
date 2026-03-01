@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0-android</TargetFrameworks>
+<RuntimeIdentifiers Condition="$(TargetFramework.Contains('-android'))">android-arm;android-arm64</RuntimeIdentifiers>
+		
 		<TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
 
@@ -31,10 +33,10 @@
 		<ApplicationTitle>Frontera FM</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.fronteraradio</ApplicationId>
+		<ApplicationId>com.fronterafm.radio</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
@@ -46,6 +48,13 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
+    <CodesignKey>Apple Development: alexander.calix@icloud.com (BQZUN2FD5M)</CodesignKey>
+    
+    <CodesignProvision>Automatic</CodesignProvision>
+</PropertyGroup>
+	
 
 	<ItemGroup>
 		<!-- App Icon -->
@@ -72,6 +81,8 @@
     
     <PackageReference Include="CommunityToolkit.Maui" Version="14.0.1" />
     <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="8.0.1" />
+
+	<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 </ItemGroup>
 
 </Project>

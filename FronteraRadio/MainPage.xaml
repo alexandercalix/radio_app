@@ -1,19 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FronteraRadio.MainPage">
+             x:Class="FronteraRadio.MainPage"
+             BackgroundColor="#0E1F2D"
+             Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a submarine number ten" />
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1a2e3e" Offset="0.0"/>
+                <GradientStop Color="#0E1F2D" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
 
+        <VerticalStackLayout VerticalOptions="Center" Spacing="30">
+            
+            <Image x:Name="IntroLogo"
+                   Source="logo.png"
+                   HeightRequest="200"
+                   WidthRequest="200"
+                   Opacity="0"
+                   Scale="0.5"
+                   HorizontalOptions="Center" />
+
+            <ActivityIndicator x:Name="LoadingIndicator"
+                               IsRunning="True"
+                               Color="#DD5E3B"
+                               HeightRequest="40"
+                               VerticalOptions="Center" />
+
+            <Label Text="La Ley del FM"
+                   TextColor="White"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Opacity="0"
+                   x:Name="IntroText"/>
         </VerticalStackLayout>
-    </ScrollView>
-
+    </Grid>
 </ContentPage>

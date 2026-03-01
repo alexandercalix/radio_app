@@ -12,6 +12,7 @@ public partial class PlayerPage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = vm;
+
 		_audioService = audioService;
 
 		// Escuchamos cuando la página termina de cargarse
@@ -58,6 +59,8 @@ public partial class PlayerPage : ContentPage
 			}
 		}
 	}
+
+
 
 	private async void StartBounceAnimation()
 	{

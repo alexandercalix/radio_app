@@ -1,4 +1,6 @@
-﻿using Foundation;
+﻿using AVFoundation;
+using Foundation;
+using UIKit;
 
 namespace FronteraRadio;
 
@@ -6,4 +8,13 @@ namespace FronteraRadio;
 public class AppDelegate : MauiUIApplicationDelegate
 {
 	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+
+	public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+	{
+		var session = AVFoundation.AVAudioSession.SharedInstance();
+		session.SetCategory(AVAudioSessionCategory.Playback, AVAudioSessionCategoryOptions.DefaultToSpeaker);
+		session.SetActive(true);
+
+		return base.FinishedLaunching(app, options);
+	}
 }

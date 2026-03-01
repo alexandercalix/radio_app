@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using FronteraRadio.Core.Enums;
 using FronteraRadio.Core.Icons;
 using FronteraRadio.Core.Interfaces;
@@ -80,7 +81,7 @@ public class PlayerViewModel : BaseViewModel
     public PlayerState State
     {
         get => _state;
-        private set
+        set
         {
             _state = value;
             OnPropertyChanged();
@@ -95,7 +96,6 @@ public class PlayerViewModel : BaseViewModel
             OnPropertyChanged(nameof(MainButtonCommand));
         }
     }
-
     public bool IsPlaying => State == PlayerState.Playing;
     public bool IsConnecting => State == PlayerState.Connecting || State == PlayerState.Reconnecting;
 
@@ -118,6 +118,8 @@ public class PlayerViewModel : BaseViewModel
     {
         _audioService = audioService;
         _configService = configService;
+
+        _state = PlayerState.Stopped;
 
         PlayCommand = new Command(async () => await PlayAsync());
         StopCommand = new Command(async () => await StopAsync());

@@ -9,13 +9,7 @@ namespace FronteraRadio.Services.Configuration;
 public class AppConfigService : IAppConfigService
 {
     private readonly HttpClient _httpClient;
-
-    // --- CONFIGURACIÓN DE FRECUENCIA ---
-    // 0 = Siempre (cada apertura)
-    // 1 = Una vez al día
-    // 7 = Una vez por semana
-    private const int RefreshDays = 0;
-
+    private const int RefreshDays = 0; // Para producción, 1 día está bien
     private const string ConfigUrl = "https://alexandercalix.github.io/radio_app/remote-config/config.json";
     private const string ConfigCacheKey = "remote_config_cache";
     private const string ConfigLastFetchKey = "remote_config_last_fetch";
@@ -27,29 +21,59 @@ public class AppConfigService : IAppConfigService
 
     public async Task<AppConfig> GetConfigAsync()
     {
+        // --- 1. MODO DESARROLLO (HOT RELOAD FRIENDLY) ---
+#if DEBUG
+        Console.WriteLine(">>>> MODO DEBUG: Usando configuración local 'quemada'.");
+        return GetDebugConfig();
+#endif
+
+        // --- 2. MODO PRODUCCIÓN (ESTO SOLO CORRE EN RELEASE) ---
         var shouldRefresh = ShouldRefresh();
 
         if (shouldRefresh)
         {
-            Console.WriteLine("Attempting to fetch remote config...");
             var remote = await TryFetchRemote();
-
             if (remote != null)
             {
-                Console.WriteLine("Remote config fetched successfully.");
                 SaveCache(remote);
                 return MapToDomain(remote);
             }
-            Console.WriteLine("Failed to fetch remote config. Falling back to cache or default.");
         }
 
-        // Si no toca refrescar O el fetch falló, intentamos cargar de Cache
         var cached = LoadFromCache();
         if (cached != null)
             return MapToDomain(cached);
 
-        // Si no hay nada en cache, usamos el default "quemado"
         return GetDefaultConfig();
+    }
+
+    private AppConfig GetDebugConfig()
+    {
+        return new AppConfig
+        {
+            RadioName = "Frontera TEST (Local)",
+            StreamUrl = "https://stream-176.zeno.fm/0uwm0hb5u0hvv", // Tu stream de prueba
+            Update = new AppUpdateInfo
+            {
+                // Juega con esto: pon "2.0.0" para ver el modal, o "1.0.0" para entrar directo
+                MinimumVersion = "1.0.0",
+                ForceUpdate = true,
+                UpdateMessage = "¡PRUEBA LOCAL! No se hizo push a GitHub para ver esto. 🚀",
+                PlayStoreUrl = "https://google.com",
+                AppStoreUrl = "https://apple.com"
+            },
+            Social = new SocialLinks
+            {
+                Facebook = "https://facebook.com",
+                Whatsapp = "https://wa.me/50432352141"
+            },
+            About = new AboutInfo
+            {
+                Description = "Probando el diseño del 'About' localmente...",
+                Latitude = 14.3833,
+                Longitude = -88.5500
+            }
+        };
     }
 
     private bool ShouldRefresh()

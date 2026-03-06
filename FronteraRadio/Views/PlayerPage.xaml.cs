@@ -32,11 +32,14 @@ public partial class PlayerPage : ContentPage
 			ShouldAutoPlay = false
 		};
 
+		player.SetBinding(MediaElement.MetadataTitleProperty, new Binding(nameof(PlayerViewModel.MetadataTitle)));
+		player.SetBinding(MediaElement.MetadataArtistProperty, new Binding(nameof(PlayerViewModel.MetadataArtist)));
+		player.SetBinding(MediaElement.MetadataArtworkUrlProperty, new Binding(nameof(PlayerViewModel.MetadataArtwork)));
+
 		// Lo metemos en el contenedor oculto y lo conectamos al servicio
 		PlayerContainer.Content = player;
 		_audioService.AttachPlayer(player);
 
-		Console.WriteLine("RADIO: Player inyectado y listo.");
 	}
 
 	protected override void OnNavigatedTo(NavigatedToEventArgs args)

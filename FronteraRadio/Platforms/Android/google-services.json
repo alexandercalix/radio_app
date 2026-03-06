@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "902437507848",
+    "project_id": "fronteraradio-99ce1",
+    "storage_bucket": "fronteraradio-99ce1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902437507848:android:535f7e29123bd56c0a12bd",
+        "android_client_info": {
+          "package_name": "com.fronterafm.radio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWkFZ9YgQtG5KsZu_EXAdQy3lKjYCaiNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FronteraRadio.Views.PlayerPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              BackgroundColor="#0E1F2D"
              Shell.NavBarIsVisible="False">
 
@@ -13,10 +14,10 @@
     </ContentPage.Background>
 
     <Grid>
-       <Image Source="fondo_placeholder.png" Aspect="AspectFill"
+       <!-- <Image Source="fondo_placeholder.png" Aspect="AspectFill"
                Opacity="0.18"
                HorizontalOptions="Center"
-               VerticalOptions="Center" />
+               VerticalOptions="Center" /> -->
 
         <Grid RowDefinitions="Auto, *, Auto" Padding="30">
             

@@ -14,9 +14,14 @@ public class PlayerViewModel : BaseViewModel
 {
     private readonly IAudioService _audioService;
     private readonly IAppConfigService _configService;
+    private readonly IFirebaseService _firebaseService;
     public bool IsStopped => State == PlayerState.Stopped;
+    private readonly IMetadataService _metadataService;
+    private DateTime? _radioStartTime;
 
     private PlayerState _state;
+    private bool _isStartingPlayback;
+    private bool _isStoppingPlayback;
     private string _streamUrl = string.Empty;
 
     public string MainButtonText =>
@@ -61,6 +66,8 @@ public class PlayerViewModel : BaseViewModel
 
     private string _currentRoute = "PlayerPage";
 
+
+
     public Color PlayerTabColor =>
         _currentRoute == "PlayerPage"
             ? Color.FromArgb("#dd5e3b")
@@ -76,6 +83,29 @@ public class PlayerViewModel : BaseViewModel
         _currentRoute = route;
         OnPropertyChanged(nameof(PlayerTabColor));
         OnPropertyChanged(nameof(AboutTabColor));
+    }
+
+    private string _metadataTitle = "Frontera 95.1 FM";
+    private string _metadataArtist = "La Ley del FM";
+    private string _metadataArtwork = "radio_logo.png"; // Stored in Resources/Images
+
+    // Add these public properties
+    public string MetadataTitle
+    {
+        get => _metadataTitle;
+        set { _metadataTitle = value; OnPropertyChanged(); }
+    }
+
+    public string MetadataArtist
+    {
+        get => _metadataArtist;
+        set { _metadataArtist = value; OnPropertyChanged(); }
+    }
+
+    public string MetadataArtwork
+    {
+        get => _metadataArtwork;
+        set { _metadataArtwork = value; OnPropertyChanged(); }
     }
 
     public PlayerState State
@@ -113,11 +143,15 @@ public class PlayerViewModel : BaseViewModel
     public ICommand StopCommand { get; }
 
     public PlayerViewModel(
-        IAudioService audioService,
-        IAppConfigService configService)
+     IAudioService audioService,
+     IAppConfigService configService,
+     IMetadataService metadataService,
+     IFirebaseService firebaseService)
     {
         _audioService = audioService;
         _configService = configService;
+        _metadataService = metadataService;
+        _firebaseService = firebaseService;
 
         _state = PlayerState.Stopped;
 
@@ -129,14 +163,33 @@ public class PlayerViewModel : BaseViewModel
         _ = InitializeAsync();
 
         OpenUrlCommand = new Command<string>(async (url) =>
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return;
+
+            await Launcher.Default.OpenAsync(url);
+            string socialPlatform =
+                url.Contains("facebook", StringComparison.OrdinalIgnoreCase) ? "facebook" :
+                url.Contains("instagram", StringComparison.OrdinalIgnoreCase) ? "instagram" :
+                url.Contains("tiktok", StringComparison.OrdinalIgnoreCase) ? "tiktok" :
+                url.Contains("whatsapp", StringComparison.OrdinalIgnoreCase) ? "whatsapp" :
+                "website";
+            _firebaseService.LogEvent("social_click", new Dictionary<string, object>
+{
+    { "platform", socialPlatform }
+});
+
+        });
+
+
+    }
+
+    public void UpdateMetadata()
     {
-        if (string.IsNullOrWhiteSpace(url))
-            return;
-
-        await Launcher.Default.OpenAsync(url);
-    });
-
-
+        // Update the properties; the UI will update via Data Binding
+        MetadataTitle = "Frontera 95.1 FM";
+        MetadataArtist = "La Ley del FM";
+        MetadataArtwork = "logo";
     }
 
     private async Task InitializeAsync()
@@ -165,15 +218,67 @@ public class PlayerViewModel : BaseViewModel
 
     private async Task PlayAsync()
     {
-        if (string.IsNullOrWhiteSpace(_streamUrl))
+
+        if (_isStartingPlayback || State == PlayerState.Playing)
             return;
 
-        await _audioService.PlayAsync(_streamUrl);
+        _isStartingPlayback = true;
+
+        try
+        {
+            await _audioService.PlayAsync(_streamUrl);
+
+            await Task.Delay(1000);
+            _metadataService.UpdateMetadata("Frontera 95.1 FM", "La Ley del FM", "");
+
+            await Task.Delay(4000);
+            _metadataService.UpdateMetadata("Frontera 95.1 FM", "La Ley del FM", "");
+
+            _radioStartTime = DateTime.UtcNow;
+
+            _firebaseService.LogEvent("radio_play_started", new Dictionary<string, object>
+{
+    { "station", "Frontera 95.1 FM" },
+    { "platform", DeviceInfo.Platform.ToString() }
+});
+        }
+        finally
+        {
+            _isStartingPlayback = false;
+        }
     }
+
+
 
     private async Task StopAsync()
     {
-        await _audioService.StopAsync();
+        if (_isStoppingPlayback || State == PlayerState.Stopped)
+            return;
+
+        _isStoppingPlayback = true;
+
+        try
+        {
+            await _audioService.StopAsync();
+
+            if (_radioStartTime != null)
+            {
+                var duration = (DateTime.UtcNow - _radioStartTime.Value).TotalSeconds;
+
+                _firebaseService.LogEvent("radio_session_end", new Dictionary<string, object>
+{
+    { "station", "Frontera 95.1 FM" },
+    { "platform", DeviceInfo.Platform.ToString() },
+    { "duration_sec", duration }
+});
+            }
+
+            _radioStartTime = null;
+        }
+        finally
+        {
+            _isStoppingPlayback = false;
+        }
     }
 
     private void OnPlayerStateChanged(PlayerState newState)
@@ -182,5 +287,25 @@ public class PlayerViewModel : BaseViewModel
         {
             State = newState;
         });
+
+        if (newState == PlayerState.Reconnecting)
+        {
+            _firebaseService.LogEvent("radio_buffering", new Dictionary<string, object>
+{
+    { "station", "Frontera 95.1 FM" },
+    { "platform", DeviceInfo.Platform.ToString() }
+});
+        }
+
+        if (newState == PlayerState.Error)
+        {
+            _firebaseService.LogEvent("radio_stream_error", new Dictionary<string, object>
+{
+    { "station", "Frontera 95.1 FM" },
+    { "platform", DeviceInfo.Platform.ToString() }
+});
+        }
     }
+
+
 }

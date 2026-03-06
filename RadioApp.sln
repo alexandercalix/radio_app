@@ -3,8 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadioApp", "RadioApp\RadioApp.csproj", "{A6A18610-9E11-BFE0-AA9E-F0ACFE008059}"
-EndProject
+
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FronteraRadio", "FronteraRadio\FronteraRadio.csproj", "{3929BF44-5DBD-4FF2-9FC8-EABC2E96CE15}"
 EndProject
 Global

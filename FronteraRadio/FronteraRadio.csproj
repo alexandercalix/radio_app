@@ -41,6 +41,10 @@
 
 		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType>None</WindowsPackageType>
+		<AndroidLinkMode>None</AndroidLinkMode>
+		<PublishTrimmed>false</PublishTrimmed>
+		<AndroidEnableMultiDex>true</AndroidEnableMultiDex>
+<AndroidEnableProguard>false</AndroidEnableProguard>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
@@ -51,8 +55,12 @@
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
     <CodesignKey>Apple Development: alexander.calix@icloud.com (BQZUN2FD5M)</CodesignKey>
-    
     <CodesignProvision>Automatic</CodesignProvision>
+    <_AppArgs>-FIRAnalyticsDebugEnabled</_AppArgs>
+</PropertyGroup>
+
+<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
+    <MtouchExtraArgs>$(MtouchExtraArgs) --args -FIRAnalyticsDebugEnabled</MtouchExtraArgs>
 </PropertyGroup>
 	
 
@@ -83,6 +91,15 @@
     <PackageReference Include="CommunityToolkit.Maui.MediaElement" Version="8.0.1" />
 
 	<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+
+	<PackageReference Include="Plugin.Firebase.Analytics" Version="3.0.0" />
+	<PackageReference Include="Plugin.Firebase.Core" Version="3.0.0" />
 </ItemGroup>
+
+
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+    <BundleResource Include="Platforms\iOS\GoogleService-Info.plist" LogicalName="GoogleService-Info.plist" />
+</ItemGroup>
+
 
 </Project>

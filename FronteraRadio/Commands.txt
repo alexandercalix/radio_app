@@ -1,0 +1,30 @@
+iOS Compile: dotnet build -f net10.0-ios   
+iOS Run wih Firebase Debug Enable: dotnet build -t:Run -f net10.0-ios -p:_AppArgs="-FIRAnalyticsDebugEnabled"    
+
+
+
+iOS: run specific simulator: dotnet build -t:Run -f net10.0-ios -p:RuntimeIdentifier=iossimulator-arm64 -p:_DeviceName="iPhone 15 Pro"
+iOS: run specific simulator by ID: dotnet build -t:Run -f net10.0-ios -p:RuntimeIdentifier=iossimulator-arm64 -p:TargetSimulatorGuid=DEVICE_GUID
+iOS: run specific physical device: dotnet build -t:Run -f net10.0-ios -p:RuntimeIdentifier=ios-arm64 -p:_DeviceName="IPHONE_NAME"
+iOS: send and install: xcrun devicectl device install app --device "9F5625D6-39FE-5454-9A87-F7D4078DC487" bin/Debug/net10.0-ios/ios-arm64/FronteraRadio.app/
+
+Android: device list: adb devices
+Android: build: dotnet build -f net10.0-android
+Android: run: dotnet build -t:Run -f net10.0-android
+Android: run specific device: dotnet build -t:Run -f net10.0-android -p:AndroidDeviceSerial=SERIAL_NUMBER
+Android: view logs: adb logcat *:S dotnet:I FirebaseAnalytics:V
+
+Andriod Compile: dotnet build -f net10.0-android
+Andriod Run: dotnet build -t:Run -f net10.0-android
+
+Run Once to enable Firebase Debug: adb shell setprop debug.firebase.analytics.app com.fronterafm.radio
+Show adb log: adb logcat --pid=$(adb shell pidof -s com.fronterafm.radio)
+Clear adb logs: adb logcat -c
+Capture the log: adb logcat | grep -E "AndroidRuntime|FATAL|Exception|fronterafm" 
+
+
+General: clean project: dotnet clean
+General: deep clean: rm -rf bin/ obj/
+General: restore packages: dotnet restore
+General: list workloads: dotnet workload list
+General: update workloads: dotnet workload update

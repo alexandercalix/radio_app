@@ -15,6 +15,8 @@ public class AppDelegate : MauiUIApplicationDelegate
 		session.SetCategory(AVAudioSessionCategory.Playback, AVAudioSessionCategoryOptions.DefaultToSpeaker);
 		session.SetActive(true);
 
+		Firebase.Core.App.Configure();
+
 		return base.FinishedLaunching(app, options);
 	}
 }
